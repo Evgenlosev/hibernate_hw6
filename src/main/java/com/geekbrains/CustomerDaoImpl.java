@@ -6,39 +6,39 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ProductDaoImpl implements ProductDao{
+public class CustomerDaoImpl implements CustomerDao {
     private SessionFactoryUtils sessionFactoryUtils;
 
-    public ProductDaoImpl(SessionFactoryUtils sessionFactoryUtils) {
+    public CustomerDaoImpl(SessionFactoryUtils sessionFactoryUtils) {
         this.sessionFactoryUtils = sessionFactoryUtils;
     }
 
     @Override
-    public Product findById(Long id) {
-        try  (Session session = sessionFactoryUtils.getSession()) {
+    public Customer findById(Long id) {
+        try (Session session = sessionFactoryUtils.getSession()) {
             session.beginTransaction();
-            Product product = session.get(Product.class, id);
+            Customer customer = session.get(Customer.class, id);
             session.getTransaction().commit();
-            return product;
+            return customer;
         }
-
     }
 
     @Override
-    public List<Product> findAll() {
+    public List<Customer> findAll() {
         try (Session session = sessionFactoryUtils.getSession()) {
-            session.beginTransaction();
-            List<Product> products = session.createQuery("select p from Product p").getResultList();
-            session.getTransaction().commit();
-            return products;
+        session.beginTransaction();
+        List<Customer> customers = session.createQuery("select c from Customer c").getResultList();
+        session.getTransaction().commit();
+        return customers;
         }
     }
+
 
     @Override
     public void deleteById(Long id) {
         try (Session session = sessionFactoryUtils.getSession()) {
             session.beginTransaction();
-            session.createQuery("delete from Product p where p.id = :id")
+            session.createQuery("delete from Customer c where c.id = :id")
                     .setParameter("id", id)
                     .executeUpdate();
             session.getTransaction().commit();
@@ -46,15 +46,14 @@ public class ProductDaoImpl implements ProductDao{
     }
 
     @Override
-    public List<Customer> findCustomersByProductId(Long id) {
+    public List<Product> findProductsByCustomerId(Long id) {
         try (Session session = sessionFactoryUtils.getSession()) {
             session.beginTransaction();
-            Product product = session.get(Product.class, id);
-            List<Customer> customers = session.createNativeQuery("SELECT * FROM customers c JOIN products_customers ON c.id = products_customers.customer_id WHERE product_id = :id", Customer.class)
+            List<Product> products = session.createNativeQuery("SELECT * FROM products p JOIN products_customers ON p.id = products_customers.product_id WHERE customer_id = :id", Product.class)
                     .setParameter("id", id)
                     .getResultList();
             session.getTransaction().commit();
-            return customers;
+            return products;
         }
     }
 }
