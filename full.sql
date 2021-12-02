@@ -7,3 +7,16 @@ DROP TABLE IF EXISTS customers CASCADE;
 CREATE TABLE customers (id bigserial PRIMARY KEY, name VARCHAR(255));
 INSERT INTO customers (name) VALUES
 ('John'), ('Michael'), ('Bob');
+
+DROP TABLE IF EXISTS products_customers CASCADE;
+CREATE TABLE products_customers (product_id bigint, customer_id bigint, FOREIGN KEY (product_id) REFERENCES products (id), FOREIGN KEY (customer_id) REFERENCES customers (id));
+INSERT INTO products_customers (product_id, customer_id) VALUES
+(1, 1),
+(2, 1),
+(3, 1),
+(1, 2),
+(4, 2),
+(6, 2),
+(4, 3),
+(5, 3),
+(6, 3);

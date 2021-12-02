@@ -9,6 +9,6 @@ public interface ProductDao {
     Product findById(Long id);
     List<Product> findAll();
     void deleteById(Long id);
-    Product saveOrUpdate(Product product);
-    void changePrice(Long productId, Integer delta);
+    List<Customer> findCustomersByProductId(Long id);
+
 }

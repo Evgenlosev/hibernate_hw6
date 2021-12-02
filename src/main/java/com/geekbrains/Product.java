@@ -1,6 +1,7 @@
 package com.geekbrains;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -16,6 +17,14 @@ public class Product {
 
     @Column(name = "price")
     private Integer price;
+
+    @ManyToMany
+    @JoinTable(
+            name = "products_customers",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "customer_id")
+    )
+    private List<Customer> customers;
 
     public Long getId() {
         return id;
@@ -56,5 +65,13 @@ public class Product {
                 ", title='" + title + '\'' +
                 ", price=" + price +
                 '}';
+    }
+
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
     }
 }
